@@ -1,27 +1,31 @@
 //your JS code here. If required.
-let input = document.getElementById('processBtn');
-input.addEventListener('click', function() {
-    // Get the input value
-    const input = document.getElementById('numberInput').value;
-	console.log(input)
-
-    // Convert the input string to an array of numbers
-    const numbersArray = input.split(',').map(Number);
-
-    // Call your function to process the array
-    processArray(numbersArray);
-});
-
-function processArray(arr) {
-    // Here you can implement your logic (like filtering and transforming the array)
-    const outputDiv = document.getElementById("output");
-	const evenArr = arr.filter((val)=>val%2===0);
-	const evenNumber = evenArr.join();
-	setTimeout(()=>{
-		outputDiv.textContent = evenNumber;
-	},1000)
-	setTimeout(()=>{
-		const mulArr = evenArr.map((val)=>val*2)
-		outputDiv.textContent = mulArr;
-	},3000)
+const outputDiv = document.getElementById("output");
+const promise1 = (arr) =>{
+	return new Promise((resolve, reject)=>{
+		setTimeout(()=>{
+			const evenArr = arr.filter((val)=>val%2===0);
+			resolve(evenArr.join());
+		},1000)		
+	})
 }
+
+const promise2 = (arr) =>{
+	return new Promise((resolve, reject)=>{
+		setTimeout(()=>{
+			const multiplyArr = arr.map((val)=>val*2);
+			resolve(multiplyArr.join());
+		},2000)		
+	})
+}
+const arr = [1,2,3,4];
+promise1(arr).then((filterArr)=>{
+	outputDiv.textContent = filterArr;
+	let arr2=filterArr.split(',').map(Number)
+	return promise2(arr2)
+}).then((mulArr)=>{
+	outputDiv.textContent = mulArr;
+}).catch((e)=>{
+	console.log('error',e)
+})
+
+
